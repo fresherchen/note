@@ -11,18 +11,17 @@ MAINTAINER Jpchen <jpchen@leadstec.com>
 # clone code 
 RUN git clone http://jpchen:jinpei0930@git.leadstec.com/jpchen/mic-tpl.git
 
-# install npm packages
-RUN cd mic-tpl/src && \
-    npm install
+# copy npm packages
+RUN cd mic-tpl && \
+    tar -zxvf node_modules.tar.gz && \
+	mv node_modules src && \
+	rm -rf node_modules.tar.gz
 	
 # log tpl complete
-RUN echo 'notes micro servers template is ok' 
+RUN echo 'notes micro services template is ok' 
 
 # clone code 
-ONBUILD git clone http://jpchen:jinpei0930@git.leadstec.com/jpchen/note-microServers.git
+ONBUILD git clone http://jpchen:jinpei0930@git.leadstec.com/jpchen/mic-servers.git
 
 # copy node_module
-ONBUILD COPY mic-tpl/src/node_modules note-microServers/src
-
-# rm files
-# ONBUILD RUN rm mic-tpl
+ONBUILD COPY mic-tpl/src/node_modules mic-services/src
