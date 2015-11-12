@@ -1,0 +1,9 @@
+.DS_Store
+.nodemonignore
+.sass-cache/
+npm-debug.log
+node_modules/
+app/tests/coverage/
+config/sslcert/*.pem
+config/env/local.js
+sftp-config.json
