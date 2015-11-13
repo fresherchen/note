@@ -14,8 +14,8 @@ dev:
     - ENABLE_SSHD=true
     - NODE_ENV=development
     - PORT=3000
-    - STACK_DBNAME=appstack
-    - STACK_SESSION_SECRET=appstack
+    - NOTES_DBNAME=notesmicroservices
+    - NOTES_SESSION_SECRET=notesmicroservices
   links:
     - devdb:db
   hostname: notes-dev.microservices.com
