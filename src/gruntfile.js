@@ -55,14 +55,14 @@ module.exports = function(grunt) {
 				// tasks: ['test:server'],
 			// }
 		},
-		jshint: {
-			all: {
-				src: watchFiles.clientJS.concat(watchFiles.serverJS),
-				options: {
-					jshintrc: true
-				}
-			}
-		},
+		// jshint: {
+    		// 	all: {
+    		//		src: watchFiles.clientJS.concat(watchFiles.serverJS),
+    		//		options: {
+    		//			jshintrc: true
+    		//		}
+    		//	}
+	    //	},
 		// csslint: {
 			// options: {
 				// csslintrc: '.csslintrc'
@@ -89,14 +89,14 @@ module.exports = function(grunt) {
 			// }
 		// },
 		nodemon: {
-			dev: {
-				script: 'server.js',
-				options: {
-					nodeArgs: ['--debug'],
-					ext: 'js,html',
-					watch: watchFiles.serverViews.concat(watchFiles.serverJS)
-				}
-			}
+		//	dev: {
+		//		script: 'server.js',
+		//		options: {
+		//		nodeArgs: ['--debug'],
+		//			ext: 'js,html',
+		//			watch: watchFiles.serverViews.concat(watchFiles.serverJS)
+		//		}
+		//	}
 		},
 		'node-inspector': {
 			custom: {
