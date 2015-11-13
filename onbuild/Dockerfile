@@ -11,7 +11,7 @@ MAINTAINER Jpchen <jpchen@leadstec.com>
 # clone code 
 RUN git clone http://jpchen:jinpei0930@git.leadstec.com/jpchen/mic-tpl.git
 
-# install npm packages
+# mv npm packages
 RUN cd mic-tpl && \
     tar -zxvf node_modules.tar.gz && \
 	mv node_modules src && \
@@ -24,5 +24,5 @@ RUN echo 'notes micro services template is ok'
 ONBUILD RUN git clone http://jpchen:jinpei0930@git.leadstec.com/jpchen/mic-services.git
 
 # copy node_module
-ONBUILD COPY mic-tpl/src/node_modules mic-services/src && \
+ONBUILD RUN cp -r mic-tpl/src/node_modules/ mic-services/src/ && \
         rm -rf mic-tpl
