@@ -24,9 +24,9 @@ devdb:
   ports:
     - "41434:27017"
   volumes:
-    - /var/lib/docker/vfs/dir/logcenter/notes-dev.microservices.com:/data/log
-    - /var/lib/docker/vfs/dir/dbcenter/notes-dev.microservices.com:/data/db
-    - /var/lib/docker/vfs/dir/datacenter/notes-dev.microservices.com:/data/persist
+    - /var/lib/docker/vfs/dir/logcenter/notes-dev-db.microservices.com:/data/log
+    - /var/lib/docker/vfs/dir/dbcenter/notes-dev-db.microservices.com:/data/db
+    - /var/lib/docker/vfs/dir/datacenter/notes-dev-db.microservices.com:/data/persist
   environment:
     - EMAIL=jpchen@leadstec.com
     - ENGINE=localhost
