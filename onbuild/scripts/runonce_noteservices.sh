@@ -15,7 +15,7 @@ NOTES_DBPASS=${DB_ENV_DBPASS:-}
 # Stack setup
 #
 runonce_noteservices() {
-    # AppStack main configs
+    # Services main configs
     printf "Configuring Services basis settings ... "
     sudo -u node -H sed -i "s/{{NOTES_SESSION_SECRET}}/${NOTES_SESSION_SECRET}/" ${APP_DIR}/config/env/default.js
     # db configs
@@ -34,5 +34,5 @@ runonce_noteservices() {
 
     printf "${green}OK\n${end}"
 
-    echo "Initialization for stack image completed !!!"
+    echo "Initialization for services image completed !!!"
 }
