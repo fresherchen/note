@@ -4,8 +4,6 @@
 source /scripts/runonce_nodejs.sh
 runonce_nodejs
 
-STACK_TITLE=${STACK_TITLE:-NotesMicroServices}
-STACK_DESC=${STACK_DESC:-$STACK_TITLE}
 NOTES_DBNAME=${NOTES_DBNAME:-notesmicroservices}
 NOTES_SESSION_SECRET=${STACK_SESSION_SECRET:-$NOTES_DBNAME}
 NODE_ENV=${NODE_ENV:-development}
@@ -18,9 +16,7 @@ NOTES_DBPASS=${DB_ENV_DBPASS:-}
 #
 runonce_noteservices() {
     # AppStack main configs
-    printf "Configuring AppStack basis settings ... "
-    sudo -u node -H sed -i "s/{{STACK_TITLE}}/${STACK_TITLE}/" ${APP_DIR}/config/env/default.js
-    sudo -u node -H sed -i "s/{{STACK_DESC}}/${STACK_DESC}/" ${APP_DIR}/config/env/default.js
+    printf "Configuring Services basis settings ... "
     sudo -u node -H sed -i "s/{{NOTES_SESSION_SECRET}}/${NOTES_SESSION_SECRET}/" ${APP_DIR}/config/env/default.js
     # db configs
     if [[ -n "DB_PORT_27017_TCP_ADDR}" ]]; then
