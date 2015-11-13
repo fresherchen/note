@@ -10,6 +10,3 @@ if [[ -n "DB_PORT_27017_TCP_ADDR}" ]]; then
         sudo -u node -H sed -ri "s|mongodb://.*|mongodb://${DB_PORT_27017_TCP_ADDR}/${NOTES_DBNAME}',|g" ${APP_DIR}/config/env/local.js
     fi
 fi
-
-cd /${APP_DIR}/src
-node server.js
