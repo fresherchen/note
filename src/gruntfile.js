@@ -56,13 +56,13 @@ module.exports = function(grunt) {
 			// }
 		},
 		// jshint: {
-    		// 	all: {
-    		//		src: watchFiles.clientJS.concat(watchFiles.serverJS),
-    		//		options: {
-    		//			jshintrc: true
-    		//		}
-    		//	}
-	    //	},
+    			// all: {
+    				// src: watchFiles.clientJS.concat(watchFiles.serverJS),
+    				// options: {
+    					// jshintrc: true
+    				// }
+    			// }
+	    	// },
 		// csslint: {
 			// options: {
 				// csslintrc: '.csslintrc'
@@ -89,14 +89,14 @@ module.exports = function(grunt) {
 			// }
 		// },
 		nodemon: {
-		//	dev: {
-		//		script: 'server.js',
-		//		options: {
-		//		nodeArgs: ['--debug'],
-		//			ext: 'js,html',
-		//			watch: watchFiles.serverViews.concat(watchFiles.serverJS)
-		//		}
-		//	}
+			dev: {
+				script: 'server.js',
+				options: {
+				nodeArgs: ['--debug'],
+					ext: 'js,html',
+					watch: watchFiles.serverViews.concat(watchFiles.serverJS)
+				}
+			}
 		},
 		'node-inspector': {
 			custom: {
@@ -169,7 +169,7 @@ module.exports = function(grunt) {
 		var config = require('./config/config');
 
 		grunt.config.set('applicationJavaScriptFiles', config.assets.js);
-		grunt.config.set('applicationCSSFiles', config.assets.css);
+		// grunt.config.set('applicationCSSFiles', config.assets.css);
 	});
 
 	// Default task(s).
@@ -182,10 +182,10 @@ module.exports = function(grunt) {
 	grunt.registerTask('secure', ['env:secure', 'lint', 'copy:localConfig', 'concurrent:default']);
 
 	// Lint task(s).
-	grunt.registerTask('lint', ['jshint', 'csslint']);
+	// grunt.registerTask('lint', ['jshint', 'csslint']);
 
 	// Build task(s).
-	grunt.registerTask('build', ['lint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin']);
+	// grunt.registerTask('build', ['lint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin']);
 
 	// Test task.
 	grunt.registerTask('test', ['copy:localConfig', 'test:server', 'test:client']);
