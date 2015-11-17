@@ -2,10 +2,10 @@
 
 module.exports = {
 	db: {
-		uri: 'mongodb://{{STACK_DBHOST}}/{{STACK_DBNAME}}',
+		uri: 'mongodb://{{NOTES_DBHOST}}/{{NOTES_DBNAME}}',
 		options: {
-			user: '{{STACK_DBUSER}}',
-			pass: '{{STACK_DBPASS}}'
+			user: '{{NOTES_DBUSER}}',
+			pass: '{{NOTES_DBPASS}}'
 		}
 	},
 	port: 3001,

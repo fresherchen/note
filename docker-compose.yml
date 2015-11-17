@@ -10,7 +10,7 @@ dev:
     - EMAIL=jpchen@leadstec.com
     - ENGINE=localhost
     - ENABLE_SSHD=true
-    - NODE_ENV=development
+    - NOTES_ENV=development
     - PORT=3000
     - NOTES_DBNAME=notesmicroservices
     - NOTES_SESSION_SECRET=notesmicroservices
@@ -29,4 +29,5 @@ devdb:
     - EMAIL=jpchen@leadstec.com
     - ENGINE=localhost
     - MONGO_TYPE=normal
+    - MONGOD_ENABLE_SMALLFILES=true
   hostname: notes-dev-db.microservices.com
