@@ -5,7 +5,7 @@ var fs = require('fs');
 module.exports = function(grunt) {
 	// Unified Watch Object
 	var watchFiles = {
-		// serverViews: ['app/views/**/*.*'],
+		serverViews: ['app/views/**/*.*'],
 		serverJS: ['gruntfile.js', 'server.js', 'config/**/*.js', 'app/**/*.js', '!app/tests/'],
 		// clientViews: ['public/modules/**/views/**/*.html'],
 		// clientJS: ['public/js/*.js', 'public/modules/**/*.js', '!public/modules/**/directives/*.js', '!public/modules/**/lib/*.js'],
@@ -111,13 +111,13 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		// ngAnnotate: {
-			// production: {
-				// files: {
-					// 'public/dist/application.js': '<%= applicationJavaScriptFiles %>'
-				// }
-			// }
-		// },
+		ngAnnotate: {
+			production: {
+				files: {
+					'public/dist/application.js': '<%= applicationJavaScriptFiles %>'
+				}
+			}
+		},
 		concurrent: {
 			default: ['nodemon', 'watch'],
 			debug: ['nodemon', 'watch', 'node-inspector'],
@@ -182,10 +182,10 @@ module.exports = function(grunt) {
 	grunt.registerTask('secure', ['env:secure', 'lint', 'copy:localConfig', 'concurrent:default']);
 
 	// Lint task(s).
-	// grunt.registerTask('lint', ['jshint', 'csslint']);
+	grunt.registerTask('lint', ['jshint', 'csslint']);
 
 	// Build task(s).
-	// grunt.registerTask('build', ['lint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin']);
+	grunt.registerTask('build', ['lint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin']);
 
 	// Test task.
 	grunt.registerTask('test', ['copy:localConfig', 'test:server', 'test:client']);
