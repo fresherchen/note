@@ -1,2 +1,1 @@
-FROM mictpl_tpl:latest
-# FROM reg.leadstec.com/nodejs:latest
+FROM edu.lxpt.cn/notemicroservices-tpl
