@@ -1,1 +1,1 @@
-FROM edu.lxpt.cn/notemicroservices-tpl:0.1.0-2
+FROM edu.lxpt.cn/notemicroservices-tpl:latest
