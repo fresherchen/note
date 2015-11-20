@@ -1,18 +1,18 @@
-# notes micro services 0.1
+# Note micro services 0.1
 
 ***
 
-notes micro services运行环境，适用于研发及部署。
+Note micro services运行环境，适用于研发及部署。
 
 本镜像提供：
 
-* smartnotes server 0.1
+* note server 0.1
 * Node.js 0.12.2
 * Npm 2.7.4
 * Node Packages:
     - grunt
     
-继承关系：notes micro services -->nodejs
+继承关系：note micro services -->nodejs
 
 # 使用说明
 
@@ -22,7 +22,7 @@ notes micro services运行环境，适用于研发及部署。
 
 名称 |位置              |说明
 --------|--------------------------|-----------------
-初始化 | /script/runonce_nodejs.sh   | 只有首次启动执行
+初始化 | /script/runonce_notemicroservices.sh   | 只有首次启动执行
 
 ### PORTS
 
@@ -32,7 +32,7 @@ notes micro services运行环境，适用于研发及部署。
 
 ### ENV
 
-无
+NOTES_DBNAME : DB的名字
 
 ### VOLUME
 
@@ -50,21 +50,21 @@ container路径  | Host存放位置  | 说明
 
 ```
 nodejs:
-  image: reg.leadstec.com/nodejs:latest
+  image: reg.leadstec.com/notemicroservices:latest
   ports:
   	- "41201:3000"
   volumes:
-  	- /var/lib/docker/vfs/dir/logcenter/nodejs.localhost:/data/log
-  	- /var/lib/docker/vfs/dir/datacenter/nodejs.localhost:/data/persist
+  	- /var/lib/docker/vfs/dir/logcenter/notemicroservices.localhost:/data/log
+  	- /var/lib/docker/vfs/dir/datacenter/notemicroservices.localhost:/data/persist
   environment:
   	- EMAIL=user@example.com
   	- ENGINE=localhost
-  hostname: nodejs.localhost
+  hostname: notemicroservices.localhost
 ```
 
 ### Link Container
 
-Node.js项目常采用MongoDB，本例子说明如何将nodejs与mongo进行linking。
+Node.js项目常采用MongoDB，本例子说明如何将notemicroservices与mongo进行linking。
 
 ```
 db:
@@ -73,14 +73,15 @@ db:
    	 - "41203:27017"
    	 - "41204:28017"
    volumes:
-     - /var/lib/docker/vfs/dir/logcenter/app-db.example.com:/data/log
-     - /var/lib/docker/vfs/dir/datacenter/app-db.example.com:/data/persist
+     - /var/lib/docker/vfs/dir/logcenter/notemicroservices-db.example.com:/data/log
+    - /var/lib/docker/vfs/dir/dbcenter/notemicroservices-db.example.com:/data/db
+     - /var/lib/docker/vfs/dir/datacenter/notemicroservices-db.example.com:/data/persist
    links:
      - db:db
    environment:
      - EMAIL=user@example.com
      - ENGINE=localhost
-   hostname: app.example.com
+   hostname: notemicroservices.example.com
 ```
 
 
