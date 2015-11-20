@@ -1,8 +1,8 @@
-# Notes Servers API Reference 0.1
+# Note Servers API Reference 0.1
 
 ***
 
-Notes Micro Servers API Docs
+Note Micro Servers API Docs
 
 # 使用说明
 

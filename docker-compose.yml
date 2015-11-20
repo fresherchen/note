@@ -1,33 +1,32 @@
 dev:
-  build: .
+  image: .
   ports:
     - "41436:3000"
     - "41435:22"
   volumes:
-    - /var/lib/docker/vfs/dir/logcenter/notes-dev.microservices.com:/data/log
-    - /var/lib/docker/vfs/dir/datacenter/notes-dev.microservices.com:/data/persist
+    - /var/lib/docker/vfs/dir/logcenter/note-dev.microservices.com:/data/log
+    - /var/lib/docker/vfs/dir/datacenter/note-dev.microservices.com:/data/persist
   environment:
     - EMAIL=jpchen@leadstec.com
     - ENGINE=localhost
     - ENABLE_SSHD=true
-    - NOTES_ENV=development
+    - NOTE_ENV=development
     - PORT=3000
-    - NOTES_DBNAME=notesmicroservices
-    - NOTES_SESSION_SECRET=notesmicroservices
+    - NOTE_DBNAME=notemicroservices
   links:
     - devdb:db
-  hostname: notes-dev.microservices.com
+  hostname: note-dev.microservices.com
 devdb:
   image: reg.leadstec.com/mongo:latest
   ports:
     - "41434:27017"
   volumes:
-    - /var/lib/docker/vfs/dir/logcenter/notes-dev-db.microservices.com:/data/log
-    - /var/lib/docker/vfs/dir/dbcenter/notes-dev-db.microservices.com:/data/db
-    - /var/lib/docker/vfs/dir/datacenter/notes-dev-db.microservices.com:/data/persist
+    - /var/lib/docker/vfs/dir/logcenter/note-dev-db.microservices.com:/data/log
+    - /var/lib/docker/vfs/dir/dbcenter/note-dev-db.microservices.com:/data/db
+    - /var/lib/docker/vfs/dir/datacenter/note-dev-db.microservices.com:/data/persist
   environment:
     - EMAIL=jpchen@leadstec.com
     - ENGINE=localhost
     - MONGO_TYPE=normal
     - MONGOD_ENABLE_SMALLFILES=true
-  hostname: notes-dev-db.microservices.com
+  hostname: note-dev-db.microservices.com
