@@ -32,7 +32,7 @@ Note micro services运行环境，适用于研发及部署。
 
 ### ENV
 
-NOTES_DBNAME : DB的名字
+NOTE_DBNAME : DB的名字
 
 ### VOLUME
 

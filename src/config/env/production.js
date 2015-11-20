@@ -2,10 +2,10 @@
 
 module.exports = {
 	db: {
-		uri: 'mongodb:///{{NOTES_DBHOST}}',
+		uri: 'mongodb:///{{NOTE_DBHOST}}',
 		options: {
-			user: '{{NOTES_DBUSER}}',
-			pass: '{{NOTES_DBPASS}}'
+			user: '{{NOTE_DBUSER}}',
+			pass: '{{NOTE_DBPASS}}'
 		}
 	},
 	log: {
