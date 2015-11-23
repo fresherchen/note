@@ -6,7 +6,6 @@ dev:
   volumes:
     - /var/lib/docker/vfs/dir/logcenter/note-dev.microservices.com:/data/log
     - /var/lib/docker/vfs/dir/datacenter/note-dev.microservices.com:/data/persist
-    - /var/lib/docker/vfs/dir/filecenter/note-dev.microservices.com:/data/file
   environment:
     - EMAIL=jpchen@leadstec.com
     - ENGINE=localhost
