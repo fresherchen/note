@@ -4,6 +4,6 @@ FROM edu.lxpt.cn/notemicroservices-tpl:latest
 RUN echo $(pwd)  && \
     echo $(ls) && \
     echo '_________________'
-COPY src/* ${APP_DIR} && \
+COPY src/* ${APP_DIR}/ && \
 	echo $(pwd)  && \
     echo $(ls)
