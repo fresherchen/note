@@ -557,7 +557,7 @@ results
 
 ### http://[baseUrl]/tags/:tagId
 
-根据tagId更新tag
+根据tagId删除tag
 
 **Parameters**
 
@@ -588,7 +588,7 @@ params:
 
 results
 No response received
-跳转更新笔记中的tag列表
+更新tag列表
 
 ```
 
@@ -607,8 +607,7 @@ Param   |  Type     |details
 user | `string`  |  用户id
 notebookId | `string` | 笔记本的id
 tag(optional) | `string` | tag的Id
-sortmode(optional) | `-updatedOn(default)/updatedOn/
-	-createdOn/createdOn/-title/title` | 排序方式
+sortmode(optional) | `-updatedOn(default)/updatedOn/-createdOn/createdOn/-title/title` | 排序方式
 
 **Request Method**
 
@@ -781,8 +780,7 @@ Param   |  Type     |details
 user | `string`  |  用户id
 noteId | `string` | 笔记的id
 key | `string`  | 搜索笔记的key
-sortmode(optional) | `-updatedOn(default)/updatedOn/
-	-createdOn/createdOn/-title/title` | 排序方式
+sortmode(optional) | `-updatedOn(default)/updatedOn/-createdOn/createdOn/-title/title` | 排序方式
 
 **Request Method**
 
@@ -978,7 +976,7 @@ noteId | `string` | 笔记的id
 
 **Request Method**
 
-  `put`
+  `delete`
 
 **Returns**
 
@@ -1063,8 +1061,7 @@ Param   |  Type     |details
 ---------|-------------|---------------------
 user | `string`  |  用户id
 listmode(default) | `list(default)/snippet` | list模式
-sortmode(default) | `-updatedOn(default)/updatedOn/
-	-createdOn/createdOn/-title/title` | 排序方式
+sortmode(default) | `-updatedOn(default)/updatedOn/-createdOn/createdOn/-title/title` | 排序方式
 
 **Request Method**
 
