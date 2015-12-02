@@ -1098,8 +1098,7 @@ Param   |  Type     |details
 ---------|-------------|---------------------
 user | `string`  |  用户id
 listmode(optional) | `list/snippet` | list模式
-sortmode(optional) | `-updatedOn/updatedOn/
-	-createdOn/createdOn/-title/title` | 排序方式
+sortmode(optional) | `-updatedOn/updatedOn/-createdOn/createdOn/-title/title` | 排序方式
 
 **Request Method**
 
