@@ -17,23 +17,43 @@ exports.create = function(req, res){
 	var notebook = new Notebook(req.body);
 		notebook.user = req.user.id;
 
-	notebook.save(function(err){
-		if(err){
-			console.dir(err);
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err) 
-			});
+	var searchCon = {user:req.user.id, notebookName:notebook.notebookName};
+	Notebook.find(searchCon).exec(function(err,result){
+		if(!result.length){
+			if(notebook.isDefault){
+				delete searchCon.notebookName;
+				searchCon.isDefault = true;
+				Notebook.find(searchCon).exec(function(err,callback){
+					if(!callback.length){
+						saveNotebook(notebook);
+					}else{
+						res.send({message:'You can only have one Default notebook!!!'});
+					}
+				});
+			}else{
+				saveNotebook(notebook);
+			}
 		}else{
-			res.json(notebook);	
+			res.send({message:'This notebook is already existed!!!'});
 		}
 	});
+	var saveNotebook = function(notebook){
+		notebook.save(function(err){
+			if(err){
+				return res.status(400).send({
+					message: errorHandler.getErrorMessage(err) 
+				});
+			}else{
+				res.json(notebook);	
+			}
+		});
+	};
 };
 
 /**
  * Show the current notebook 
  */
 exports.read = function(req, res){
-	console.dir('{{{{{{{{{{{}}}}}}}}}}}'+req.notebook);
 	res.json(req.notebook);
 };
 
@@ -56,7 +76,7 @@ exports.update = function(req,res){
 		});
 	};
 	
-	var searchCon = {'user':req.user.id, isDefault:'true'};
+	var searchCon = {user:req.user.id, isDefault:'true'};
 	if(notebook.isDefault){
 		Notebook.find(searchCon).exec(function(err,OriginalNotebook){
 			if(err){
@@ -126,7 +146,7 @@ exports.delete = function(req,res){
  */
 exports.list = function(req,res){
 	
-	var searchCon = {'user':req.user.id};
+	var searchCon = {user:req.user.id};
 	
 	searchCon = _.assign(searchCon,req.query);
 	Notebook.find(searchCon).sort().exec(function(err,notebooks){
@@ -138,13 +158,6 @@ exports.list = function(req,res){
 			res.json(notebooks);
 		}
 	});
-};
-
-/**
- * Check bookName
- */
-exports.checkBookName = function(req,res){
-
 };
 
 /**

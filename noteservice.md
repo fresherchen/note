@@ -8,7 +8,11 @@ Note Micro Servers API Docs
 
 本servers是基于nodejs+mongodb开发的，以通过调用API的方式对外提供云笔记服务。
 
-目前版本暂不需要通过token验证即可调用，验证部分待后续补充。
+1、目前版本各方法暂不需要token验证即可调用，验证部分待后续补充；
+2、是否要为每个新用户创建一个默认笔记本待讨论，这里暂时没有；
+3、默认笔记本可以没有，有则只能有一个，且不能被删除，除非被置为非默认；
+4、笔记本被删除，它的笔记被丢进Trash中，restore后笔记进入默认笔记本中；
+5、笔记内容长度不大于100000；
 
 # 主要方法
 
@@ -16,16 +20,17 @@ Note Micro Servers API Docs
 
 ***
 
-### http://[baseUrl]/notebook/
+### http://[baseUrl]/notebooks
 
-查看用户全部笔记本 list
+获取用户笔记本 list，亦可用于验证笔记本名是否重复
 
 **Parameters**
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user     |  `string`   | 用户  user id 
-isDefault(optional) |  `boolean`  | 是否默认笔记本
+user     |  `String`   | 用户  user id 
+isDefault(optional) |  `Boolean`  | 是否默认笔记本
+notebookName(optional) |  `String` | 笔记本名
 
 **Request Method**
 
@@ -66,7 +71,7 @@ results
 
 ```
 
-### http://[baseUrl]/notebook/
+### http://[baseUrl]/notebooks
 
 创建新笔记本
 
@@ -74,8 +79,9 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user     |  `string`   | 用户  user id 
-notebookName |  `string`  |  笔记本名称
+user     |  `String`   | 用户  user id 
+notebookName |  `String`  |  笔记本名称
+isDefault(optional)  | `Boolean`  |   是否设置为默认笔记本；不传，默认false
 
 **Request Method**
 
@@ -107,51 +113,8 @@ results
 }
 
 ```
-### http://[baseUrl]/notebook/notebookName/
 
-通过笔记本名获取笔记本，用于验证笔记本名是否重复
-
-**Parameters**
-
-Param   |  Type     |details
----------|-------------|---------------------
-user     |  `string`   | 用户  user id 
-notebookName |  `string`  |  笔记本名称
-
-**Request Method**
-
-  `get`
-
-**Returns**
-
-  success: status 200, json type datas
-  fail: fail info
-  
-**Example**
-```
-params:
-{
-  "user": "562dd4ac7189f7be06291949",
-  "notebookName": "secondNotebook"
-}
-  
-  ......
-  
-results
-[
-  {
-   "_id": "563c641753c5cb9e40be907b",
-   "user": "562dd4ac7189f7be06291949",
-   "__v": 0,
-   "isDefault": false,
-   "createdOn": "2015-11-06T08:25:59.122Z",
-   "notebookName": "secondNotebook"
-  }
-]
-
-```
-
-### http://[baseUrl]/notebook/:notebookId
+### http://[baseUrl]/notebooks/:notebookId
 
 通过笔记本id获取笔记本
 
@@ -159,7 +122,8 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-:notebookId |  `string`  |  笔记本id
+:notebookId |  `String`  |  笔记本id
+user |  `String`  |  用户id
 
 **Request Method**
 
@@ -175,6 +139,7 @@ Param   |  Type     |details
 params:
 
   :notebookId 替换为 563c641753c5cb9e40be907b
+  user：562dd4ac7189f7be06291949
 
   ......
 
@@ -193,7 +158,7 @@ results
 
 ```
 
-### http://[baseUrl]/notebook/:notebookId
+### http://[baseUrl]/notebooks/:notebookId
 
 通过笔记本id修改笔记本
 
@@ -201,14 +166,14 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-:notebookId |  `string`  |  笔记本id
-user  | `string`  | 用户id
-notebookName  | `string`  |  笔记本名
-isDefault  | `string`  |   是否设置为默认笔记本
+:notebookId |  `String`  |  笔记本id
+user  | `String`  | 用户id
+notebookName  | `String`  |  笔记本名
+isDefault  | `Boolean`  |   是否设置为默认笔记本；不传，默认false
 
 **Request Method**
 
-  `put`
+  `post`
 
 **Returns**
 
@@ -240,7 +205,7 @@ results
 
 ```
 
-### http://[baseUrl]/notebook/:notebookId
+### http://[baseUrl]/notebooks/:notebookId
 
 通过笔记本id删除笔记本
 
@@ -248,8 +213,8 @@ results
 
 Param   |Type     |details
 ---------|-------------|---------------------
-:notebookId |  `string`  |  笔记本id
-user  | `string`  |  用户id
+:notebookId |  `String`  |  笔记本id
+user  | `String`  |  用户id
 
 **Request Method**
 
@@ -272,16 +237,9 @@ params:
   ......
 
 results
+将notebook中的notes移动到Trash中
 {
-  "_id": "564016e0c409a38644a5069f",
-  "user": {
-    "_id": "562dd4ac7189f7be06291949",
-    "displayName": "aaa aaa"
-  },
-  "__v": 0,
-  "isDefault": false,
-  "createdOn": "2015-11-09T03:45:36.515Z",
-  "notebookName": "secondNotebook"
+  "message": "Notebook was removed successfuly!!!"
 }
 
 ```
@@ -292,13 +250,15 @@ results
 
 ### http://[baseUrl]/tags
 
-获取tag列表
+获取全部tag列表或通过tag名称搜索tag
 
 **Parameters**
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user  | `string`  |  用户id
+user  | `String`  |  用户id
+tagName(optional)  | `String` | 标签名称
+status(optional) |  `Fuzzy`  | 搜索精度，与tagName配合，添加则为模糊查询
 
 **Request Method**
 
@@ -312,8 +272,11 @@ user  | `string`  |  用户id
 **Example**
 ```
 params:
-
-  user:562dd4ac7189f7be06291949
+{
+  "user":"562dd4ac7189f7be06291949",
+  "tagName":"f",
+  "status":"Fuzzy"
+}
   ......
 
 results
@@ -324,6 +287,13 @@ results
    "tagName": "ghf",
    "__v": 0,
    "createdOn": "2015-11-09T05:46:31.596Z"
+  },
+  {
+   "_id": "564042acddc25592097e3963",
+   "user": "562dd4ac7189f7be06291949",
+   "tagName": "asf",
+   "__v": 0,
+   "createdOn": "2015-11-09T06:52:28.315Z"
   }
 ]
 
@@ -336,8 +306,8 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user  | `string`  |  用户id
-tagName  | `string` | tag名
+user  | `String`  |  用户id
+tagName  | `String` | tag名
 
 **Request Method**
 
@@ -376,8 +346,8 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user  | `string`  |  用户id
-tagsId  | `Array` | 标签的id
+user  | `String`  |  用户id
+tagsId(optional)  | `Array` | 标签的id
 
 **Request Method**
 
@@ -417,57 +387,6 @@ results
 
 ```
 
-### http://[baseUrl]/tags/tagName
-
-根据tag名搜索tag
-
-**Parameters**
-
-Param   |  Type     |details
----------|-------------|---------------------
-user  | `string`  |  用户id
-tagName  | `string` | 标签名
-status(optional) |  `Fuzzy`  | 搜索精度，添加则支持模糊查询
-
-**Request Method**
-
-  `get`
-
-**Returns**
-
-  success: status 200, json type datas
-  fail: fail info
-  
-**Example**
-```
-params:
-
-  user:562dd4ac7189f7be06291949,
-  tagName:f,
-  status:Fuzzy
-
-  ......
-
-results
-[
-  {
-   "_id": "56403337ddc25592097e3962",
-   "user": "562dd4ac7189f7be06291949",
-   "tagName": "ghf",
-   "__v": 0,
-   "createdOn": "2015-11-09T05:46:31.596Z"
-  },
-  {
-   "_id": "564042acddc25592097e3963",
-   "user": "562dd4ac7189f7be06291949",
-   "tagName": "asf",
-   "__v": 0,
-   "createdOn": "2015-11-09T06:52:28.315Z"
-  }
-]
-
-```
-
 ### http://[baseUrl]/tags/:tagId
 
 根据tagId获取tag
@@ -476,8 +395,8 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user  | `string`  |  用户id
-tagId  | `string` | 标签的ID
+user  | `String`  |  用户id
+tagId  | `String` | 标签的ID
 
 **Request Method**
 
@@ -519,13 +438,13 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user  | `string`  |  用户id
-tagId  | `string`  | 标签的id
-tagName  | `string` | 标签名
+user  | `String`  |  用户id
+tagId  | `String`  | 标签的id
+tagName  | `String` | 标签名
 
 **Request Method**
 
-  `put`
+  `post`
 
 **Returns**
 
@@ -563,8 +482,8 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user  | `string`  |  用户id
-tagId  | `string` | 标签的id
+user  | `String`  |  用户id
+tagId  | `String` | 标签的id
 
 **Request Method**
 
@@ -587,8 +506,10 @@ params:
   ......
 
 results
-No response received
-更新tag列表
+删除notes中的此tag
+{
+  "message": "Tag was removed successfuly!!!"
+}
 
 ```
 
@@ -598,15 +519,16 @@ No response received
 
 ### http://[baseUrl]/notes
 
-获取所有note
+获取note
 
 **Parameters**
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user | `string`  |  用户id
-notebookId | `string` | 笔记本的id
-tag(optional) | `string` | tag的Id
+user | `String`  |  用户id
+notebookId(optional) | `String` | 笔记本的id
+tag(optional) | `String` | tag的id
+key(optional) | `String`  | 根据key搜索笔记(含标题和内容)
 sortmode(optional) | `-updatedOn(default)/updatedOn/-createdOn/createdOn/-title/title` | 排序方式
 
 **Request Method**
@@ -621,7 +543,7 @@ sortmode(optional) | `-updatedOn(default)/updatedOn/-createdOn/createdOn/-title/
 **Example**
 ```
 params:
-	
+ 
  user:562dd4ac7189f7be06291949
  notebookId:562f29a7f3065af51d343bf9
  
@@ -653,10 +575,10 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user | `string`  |  用户id
-notebookId | `string` | 笔记本的id
-title  | `string`  | 笔记标题
-content | `string` | 笔记内容
+user | `String`  |  用户id
+notebookId | `String` | 笔记本的id；不传，则添加默认笔记本id
+title  | `String`  | 笔记标题
+content | `String` | 笔记内容
 
 **Request Method**
 
@@ -693,22 +615,22 @@ results
 }
 
 ```
-### http://[baseUrl]/notes/addTag
+### http://[baseUrl]/notes/tag
 
-为note添加tag
+为note添加或删除tag
 
 **Parameters**
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user | `string`  |  用户id
-noteId | `string` | 笔记的id
-tag | `string`  | tag的id
-flag | `add` | 判断是添加tag
+user | `String`  |  用户id
+noteId | `String` | 笔记的id
+tag | `String`  | tag的id
+flag(optional) | `add` | 添加tag；不传，默认为删除
 
 **Request Method**
 
-  `put`
+  `post`
 
 **Returns**
 
@@ -728,119 +650,23 @@ params:
   ......
 
 results
-No response received
-
-```
-### http://[baseUrl]/notes/removeTag
-
-为note移除tag
-
-**Parameters**
-
-Param   |  Type     |details
----------|-------------|---------------------
-user | `string`  |  用户id
-noteId | `string` | 笔记的id
-tag | `string`  | tag的id
-flag | `remove` | 判断是移除tag
-
-**Request Method**
-
-  `put`
-
-**Returns**
-
-  success: status 200
-  fail: fail info
-  
-**Example**
-```
-params:
-
 {
-  "user":"562dd4ac7189f7be06291949",
-  "noteId":"56406f232365258c47f99e87",
-  "tag":"564037f2d57531104581827d",
-  "flag":"remove"
+  "message": "The tag has been added to this note successfuly!!!"
 }
-  ......
-
-results
-No response received
 
 ```
-### http://[baseUrl]/notes/search
+### http://[baseUrl]/notes/mail
 
-通过key搜索notes(含标题和内容)
+通过邮件分享note(方法暂不可用，待完善)
 
 **Parameters**
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user | `string`  |  用户id
-noteId | `string` | 笔记的id
-key | `string`  | 搜索笔记的key
-sortmode(optional) | `-updatedOn(default)/updatedOn/-createdOn/createdOn/-title/title` | 排序方式
-
-**Request Method**
-
-  `post`
-
-**Returns**
-
-  success: status 200,json type datas
-  fail: fail info
-  
-**Example**
-```
-params:
-
-{
-  "user":"562dd4ac7189f7be06291949",
-  "noteId":"56406f232365258c47f99e87",
-  "key":"This"
-}
-  ......
-
-results
-[
-  {
-   "_id": "56406f232365258c47f99e87",
-   "user": "562dd4ac7189f7be06291949",
-   "notebookId": "562f29a7f3065af51d343bf9",
-   "__v": 0,
-   "tag": [],
-   "updatedOn": "2015-11-10T02:13:02.616Z",
-   "createdOn": "2015-11-09T10:02:11.168Z",
-   "content": "That is testing ,action!",
-   "title": "This test function"
-  },
-  {
-   "_id": "56406b142365258c47f99e86",
-   "user": "562dd4ac7189f7be06291949",
-   "notebookId": "562f29a7f3065af51d343bf9",
-   "__v": 0,
-   "tag": [],
-   "updatedOn": "2015-11-09T09:44:52.388Z",
-   "createdOn": "2015-11-09T09:44:52.387Z",
-   "content": "This is testing ,action!",
-   "title": "test function"
-  }
-]
-
-```
-### http://[baseUrl]/notes/sendByMail
-
-通过邮件分享note给好友(方法暂不可用，待完善)
-
-**Parameters**
-
-Param   |  Type     |details
----------|-------------|---------------------
-user | `string`  |  用户id
-noteId | `string` | 笔记的id
-email | `string`  | 好友mail地址
-message(optional) | `string` | 附加信息，留言
+user | `String`  |  用户id
+noteId | `String` | 笔记的id
+email | `String`  | 好友mail地址
+message(optional) | `String` | 附加信息，留言
 
 **Request Method**
 
@@ -874,8 +700,8 @@ success/failed
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user | `string`  |  用户id
-noteId | `string` | 笔记的id
+user | `String`  |  用户id
+noteId | `String` | 笔记的id
 
 **Request Method**
 
@@ -920,17 +746,16 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user | `string`  |  用户id
-noteId | `string` | 笔记的id
-notebookId(optional) | `string` | 笔记本的id
-title(optional) |  `string` | 笔记标题
-content(optional) | `string` | 笔记内容
-inTrash(optional) | `boolean` | 是否将笔记移进Trash
-
+user | `String`  |  用户id
+noteId | `String` | 笔记的id
+notebookId(optional) | `String` | 笔记本的id
+title(optional) |  `String` | 笔记标题
+content(optional) | `String` | 笔记内容
+inTrash(optional) | `Boolean` | 是否将笔记移进Trash
 
 **Request Method**
 
-  `put`
+  `post`
 
 **Returns**
 
@@ -970,8 +795,8 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user | `string`  |  用户id
-noteId | `string` | 笔记的id
+user | `String`  |  用户id
+noteId | `String` | 笔记的id
 
 
 **Request Method**
@@ -1024,7 +849,7 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user | `string`  |  用户id
+user | `String`  |  用户id
 
 **Request Method**
 
@@ -1059,7 +884,7 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user | `string`  |  用户id
+user | `String`  |  用户id
 listmode(default) | `list(default)/snippet` | list模式
 sortmode(default) | `-updatedOn(default)/updatedOn/-createdOn/createdOn/-title/title` | 排序方式
 
@@ -1096,7 +921,7 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user | `string`  |  用户id
+user | `String`  |  用户id
 listmode(optional) | `list/snippet` | list模式
 sortmode(optional) | `-updatedOn/updatedOn/-createdOn/createdOn/-title/title` | 排序方式
 
@@ -1130,7 +955,7 @@ results
 
 Param   |  Type     |details
 ---------|-------------|---------------------
-user | `string`  |  用户id
+user | `String`  |  用户id
 
 **Request Method**
 

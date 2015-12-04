@@ -39,9 +39,15 @@ exports.read = function(req, res){
  * List of Tags 
  */
 exports.list = function(req,res){
-	var searchCon = {'user':req.user.id};
+	var searchCon = {user:req.user.id};
 	if(req.body.tagsId){
-		searchCon ={'user':req.user.id, '_id': { $in: req.body.tagsId}};
+		searchCon._id = { $in: req.body.tagsId};
+	}
+	if(req.query.tagName){
+		searchCon.tagName = req.query.tagName;
+		if(req.query.status === 'Fuzzy'){
+			searchCon.tagName = new RegExp('.*'+req.query.tagName+'.*','gi');
+		}
 	}
 	Tag.find(searchCon).exec(function(err,tags){
 		if(err){
@@ -52,28 +58,6 @@ exports.list = function(req,res){
 			res.json(tags);
 		}
 	});
-};
-
-/**
- * getTagsByName 
- */
-exports.getTagsByName = function(req,res){
-	var searchCon = {user:req.user.id};
-	var tagName = req.query.tagName;
-	if(req.query.status === 'Fuzzy')
-	tagName = new RegExp('.*' + req.query.tagName + '.*','gi');
-	if(req.query.tagName){
-		searchCon = {user: req.user.id, tagName: tagName};
-		Tag.find(searchCon).exec(function(err,tags){
-			if(err){
-				return res.status(400).send({
-					message: errorHandler.getErrorMessage(err)
-				});
-			}else{
-				res.json(tags);
-			}
-		});
-	}
 };
 
 /**

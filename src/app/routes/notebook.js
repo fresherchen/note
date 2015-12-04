@@ -11,16 +11,13 @@ var
 	
 module.exports = function(app){
 	// Notebook routes
-	app.route('/notebook')
+	app.route('/notebooks')
 	.get(checkToken.checkTokeninUrl,notebook.list)
 	.post(checkToken.checkTokeninBody,notebook.create);
-	
-	app.route('/notebook/notebookName')
-	.get(checkToken.checkTokeninUrl,notebook.list);
 
-	app.route('/notebook/:notebookId')
+	app.route('/notebooks/:notebookId')
 	.get(checkToken.checkTokeninUrl, notebook.read)
-	.put(checkToken.checkTokeninBody, notebook.hasAuthorization, notebook.update)
+	.post(checkToken.checkTokeninBody, notebook.hasAuthorization, notebook.update)
 	.delete(checkToken.checkTokeninBody, notebook.hasAuthorization, notebook.delete);
 
 	// Finish by binding the notebook middleware

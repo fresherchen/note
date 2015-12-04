@@ -14,21 +14,15 @@ module.exports = function(app){
 	.get(checkToken.checkTokeninUrl, notes.list)
 	.post(checkToken.checkTokeninBody, notes.create);
 	
-	app.route('/notes/addTag')
-	.put(checkToken.checkTokeninBody, notes.updateTag);
+	app.route('/notes/tag')
+	.post(checkToken.checkTokeninBody, notes.updateTag);
 	
-	app.route('/notes/removeTag')
-	.put(checkToken.checkTokeninBody, notes.updateTag);
-	
-	app.route('/notes/search')
-	.post(checkToken.checkTokeninBody, notes.getNoteBykey);
-	
-	app.route('/notes/sendByMail')
+	app.route('/notes/mail')
 	.post(checkToken.checkTokeninBody, notes.sendByMail);
 	
 	app.route('/notes/:noteId')
 	.get(checkToken.checkTokeninUrl, notes.read)
-	.put(checkToken.checkTokeninBody, notes.hasAuthorization, notes.update)
+	.post(checkToken.checkTokeninBody, notes.hasAuthorization, notes.update)
 	.delete(checkToken.checkTokeninBody, notes.hasAuthorization, notes.delete);
 	
 	// Finish by binding the note middleware

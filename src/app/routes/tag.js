@@ -17,12 +17,9 @@ module.exports = function(app){
 	app.route('/tags/search')
 	.post(checkToken.checkTokeninBody, tags.list);
 	
-	app.route('/tags/tagName')
-	.get(checkToken.checkTokeninUrl, tags.getTagsByName);
-	
 	app.route('/tags/:tagId')
 	.get(checkToken.checkTokeninUrl, tags.read)
-	.put(checkToken.checkTokeninBody, tags.hasAuthorization, tags.update)
+	.post(checkToken.checkTokeninBody, tags.hasAuthorization, tags.update)
 	.delete(checkToken.checkTokeninBody, tags.hasAuthorization, tags.delete);
 	
 	// Finish by binding the tag middleware
