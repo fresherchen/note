@@ -39,7 +39,7 @@ NOTE_DBNAME : DB的名字
 container路径  | Host存放位置  | 说明
 -------------|--------------|------------------
 /data/log | logcenter   | 继承自alpine
-/data/persist  |datacenter  | 继承自alphine
+/data/persist  |datacenter  | 继承自alpine
 /data/app |datacenter  |不建议代码做volume
 
 # 实例

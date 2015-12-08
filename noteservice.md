@@ -1,18 +1,18 @@
-# Note Servers API Reference 0.1
+# Note Serveice API Reference 0.1
 
 ***
 
-Note Micro Servers API Docs
+Note Micro Service API Docs
 
 # 使用说明
 
-本servers是基于nodejs+mongodb开发的，以通过调用API的方式对外提供云笔记服务。
+本service是基于nodejs+mongodb开发的，以通过调用API的方式对外提供云笔记服务。
 
-1、目前版本各方法暂不需要token验证即可调用，验证部分待后续补充；
-2、是否要为每个新用户创建一个默认笔记本待讨论，这里暂时没有；
-3、默认笔记本可以没有，有则只能有一个，且不能被删除，除非被置为非默认；
-4、笔记本被删除，它的笔记被丢进Trash中，restore后笔记进入默认笔记本中；
-5、笔记内容长度不大于100000；
+1. 目前版本各方法暂不需要token验证即可调用，验证部分待后续补充；
+2. 是否要为每个新用户创建一个默认笔记本待讨论，这里暂时没有；
+3. 默认笔记本可以没有，有则只能有一个，且不能被删除，除非被置为非默认；
+4. 笔记本被删除，它的笔记被丢进Trash中，restore后笔记进入默认笔记本中；
+5. 笔记内容长度不大于100000；
 
 # 主要方法
 

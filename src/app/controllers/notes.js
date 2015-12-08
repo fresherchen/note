@@ -217,38 +217,6 @@ exports.list = function(req,res){
 };
 
 /**
- * getNoteBykey 
- */
-// exports.getNoteBykey = function(req,res){
-// 	var searchCon = {};
-// 	if(req.body.key){
-// 		var key = new RegExp('.*'+req.body.key+'.*','gi');
-// 		searchCon = {user: req.user.id, notebookId: req.body.notebookId,
-// 			 $nor: [{inTrash: true}], $or : [{'title': key},{'content': key}]};
-// 		if(req.body.notebookId === 'allnotes' || req.body.notebookId === undefined){
-// 			searchCon = {user: req.user.id, $nor: [{inTrash : true}],
-// 			 $or : [{'title': key},{'content': key}]};
-// 		}else if(req.body.notebookId === 'trash'){
-// 			searchCon = {user: req.user.id, inTrash : true,
-// 			 $or : [{'title': key},{'content': key}]};
-// 		}
-// 	}else{
-// 		res.json({message: 'key is null!!!'});
-// 		return;
-// 	}
-// 	var sortmode = req.body.sortmode || '-updatedOn';
-// 	Note.find(searchCon).sort(sortmode).exec(function(err,notes){
-// 		if(err){
-// 			return res.status(400).send({
-// 				message:errorHandler.getErrorMessage(err)
-// 			});
-// 		}else{
-// 			res.json(notes);
-// 		}
-// 	});
-// };
-
-/**
  * SendNyMail 
  */
 
