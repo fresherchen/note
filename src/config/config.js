@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 var _ = require('lodash'),
-	glob = require('glob'),
-	fs = require('fs');
+  glob = require('glob'),
+  fs = require('fs');
 
 /**
  * Resolve environment configuration by extending each env configuration file,
@@ -13,14 +13,14 @@ var _ = require('lodash'),
  * in local.js
  */
 var resolvingConfig = function() {
-	var conf = {};
+  var conf = {};
 
-	conf = _.extend(
-	require('./env/all'),
-	require('./env/' + process.env.NODE_ENV) || {}
+  conf = _.extend(
+  require('./env/all'),
+  require('./env/' + process.env.NODE_ENV) || {}
 );
 
-	return _.merge(conf, (fs.existsSync('./config/env/local.js') && require('./env/local.js')) || {});
+  return _.merge(conf, (fs.existsSync('./config/env/local.js') && require('./env/local.js')) || {});
 };
 
 /**
@@ -32,37 +32,37 @@ module.exports = resolvingConfig();
  * Get files by glob patterns
  */
 module.exports.getGlobbedFiles = function(globPatterns, removeRoot) {
-	// For context switching
-	var _this = this;
+  // For context switching
+  var _this = this;
 
-	// URL paths regex
-	var urlRegex = new RegExp('^(?:[a-z]+:)?\/\/', 'i');
+  // URL paths regex
+  var urlRegex = new RegExp('^(?:[a-z]+:)?\/\/', 'i');
 
-	// The output array
-	var output = [];
+  // The output array
+  var output = [];
 
-	// If glob pattern is array so we use each pattern in a recursive way, otherwise we use glob 
-	if (_.isArray(globPatterns)) {
-		globPatterns.forEach(function(globPattern) {
-			output = _.union(output, _this.getGlobbedFiles(globPattern, removeRoot));
-		});
-	} else if (_.isString(globPatterns)) {
-		if (urlRegex.test(globPatterns)) {
-			output.push(globPatterns);
-		} else {
-			glob(globPatterns, {
-				sync: true
-			}, function(err, files) {
-				if (removeRoot) {
-					files = files.map(function(file) {
-						return file.replace(removeRoot, '');
-					});
-				}
+  // If glob pattern is array so we use each pattern in a recursive way, otherwise we use glob 
+  if (_.isArray(globPatterns)) {
+    globPatterns.forEach(function(globPattern) {
+      output = _.union(output, _this.getGlobbedFiles(globPattern, removeRoot));
+    });
+  } else if (_.isString(globPatterns)) {
+    if (urlRegex.test(globPatterns)) {
+      output.push(globPatterns);
+    } else {
+      glob(globPatterns, {
+        sync: true
+      }, function(err, files) {
+        if (removeRoot) {
+          files = files.map(function(file) {
+            return file.replace(removeRoot, '');
+          });
+        }
 
-				output = _.union(output, files);
-			});
-		}
-	}
+        output = _.union(output, files);
+      });
+    }
+  }
 
-	return output;
+  return output;
 };

@@ -6,8 +6,8 @@ Note micro services运行环境，适用于研发及部署。
 
 本镜像提供：
 
-* note server 0.1
-* Node.js 0.12.2
+* note server 0.1.1
+* Node.js 0.12.3
 * Npm 2.7.4
 * Node Packages:
     - grunt
