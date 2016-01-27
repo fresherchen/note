@@ -10,18 +10,10 @@ var fs = require('fs'),
   morgan = require('morgan'),
   logger = require('./logger'),
   bodyParser = require('body-parser'),
-  session = require('express-session'),
   compression = require('compression'),
   methodOverride = require('method-override'),
-  cookieParser = require('cookie-parser'),
   helmet = require('helmet'),
-  // passport = require('passport'),
-  mongoStore = require('connect-mongo')({
-    session: session
-  }),
-  flash = require('connect-flash'),
   config = require('./config'),
-  consolidate = require('consolidate'),
   path = require('path');
 
 module.exports = function(db) {
@@ -32,13 +24,6 @@ module.exports = function(db) {
   config.getGlobbedFiles('./app/models/**/*.js').forEach(function(modelPath) {
     require(path.resolve(modelPath));
   });
-
-  // Setting application local variables
-  // app.locals.title = config.app.title;
-  // app.locals.description = config.app.description;
-  // app.locals.keywords = config.app.keywords;
-  // app.locals.jsFiles = config.getJavaScriptAssets();
-  // app.locals.cssFiles = config.getCSSAssets();
 
   // Passing the request url to environment locals
   app.use(function(req, res, next) {
@@ -58,13 +43,6 @@ module.exports = function(db) {
 
   // Showing stack errors
   app.set('showStackError', true);
-
-  // Set swig as the template engine
-  // app.engine('html', consolidate[config.templateEngine]);
-
-  // Set views path and view engine
-  // app.set('view engine', 'html');
-  // app.set('views', './app/views');
 
   // Enable logger (morgan)
   app.use(morgan(logger.getLogFormat(), logger.getLogOptions()));
@@ -90,32 +68,6 @@ module.exports = function(db) {
   app.use(helmet.nosniff());
   app.use(helmet.ienoopen());
   app.disable('x-powered-by');
-
-  // Setting the app router and static folder
-  // app.use(express.static(path.resolve('./public')));
-
-  // CookieParser should be above session
-  app.use(cookieParser());
-
-  // Express MongoDB session storage
-  app.use(session({
-    saveUninitialized: true,
-    resave: true,
-    secret: config.sessionSecret,
-    store: new mongoStore({
-      db: db.connection.db,
-      collection: config.sessionCollection
-    }),
-    cookie: config.sessionCookie,
-    name: config.sessionName
-  }));
-
-  // use passport session
-  // app.use(passport.initialize());
-  // app.use(passport.session());
-
-  // connect flash for flash messages
-  app.use(flash());
 
   // Globbing routing files
   config.getGlobbedFiles('./app/routes/**/*.js').forEach(function(routePath) {

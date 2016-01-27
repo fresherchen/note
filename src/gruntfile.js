@@ -7,9 +7,6 @@ module.exports = function(grunt) {
   var watchFiles = {
     serverViews: ['app/views/**/*.*'],
     serverJS: ['gruntfile.js', 'server.js', 'config/**/*.js', 'app/**/*.js', '!app/tests/'],
-    // clientViews: ['public/modules/**/views/**/*.html'],
-    // clientJS: ['public/js/*.js', 'public/modules/**/*.js', '!public/modules/**/directives/*.js', '!public/modules/**/lib/*.js'],
-    // clientCSS: ['public/modules/**/*.css'],
     // mochaTests: ['app/tests/**/*.js']
   };
 
@@ -17,12 +14,6 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     watch: {
-      // serverViews: {
-        // files: watchFiles.serverViews,
-        // options: {
-          // livereload: true
-        // }
-      // },
       serverJS: {
         files: watchFiles.serverJS,
         tasks: ['jshint'],
@@ -30,26 +21,6 @@ module.exports = function(grunt) {
           livereload: true
         }
       },
-      // clientViews: {
-        // files: watchFiles.clientViews,
-        // options: {
-          // livereload: true
-        // }
-      // },
-      // clientJS: {
-        // files: watchFiles.clientJS,
-        // tasks: ['jshint'],
-        // options: {
-          // livereload: true
-        // }
-      // },
-      // clientCSS: {
-        // files: watchFiles.clientCSS,
-        // tasks: ['csslint'],
-        // options: {
-          // livereload: true
-        // }
-      // },
       // mochaTests: {
         // files: watchFiles.mochaTests,
         // tasks: ['test:server'],
@@ -63,31 +34,6 @@ module.exports = function(grunt) {
             // }
           // }
         // },
-    // csslint: {
-      // options: {
-        // csslintrc: '.csslintrc'
-      // },
-      // all: {
-        // src: watchFiles.clientCSS
-      // }
-    // },
-    // uglify: {
-      // production: {
-        // options: {
-          // mangle: false
-        // },
-        // files: {
-          // 'public/dist/application.min.js': 'public/dist/application.js'
-        // }
-      // }
-    // },
-    // cssmin: {
-      // combine: {
-        // files: {
-          // 'public/dist/application.min.css': '<%= applicationCSSFiles %>'
-        // }
-      // }
-    // },
     nodemon: {
       dev: {
         script: 'server.js',
@@ -169,7 +115,6 @@ module.exports = function(grunt) {
     var config = require('./config/config');
 
     grunt.config.set('applicationJavaScriptFiles', config.assets.js);
-    // grunt.config.set('applicationCSSFiles', config.assets.css);
   });
 
   // Default task(s).
@@ -182,10 +127,10 @@ module.exports = function(grunt) {
   grunt.registerTask('secure', ['env:secure', 'lint', 'copy:localConfig', 'concurrent:default']);
 
   // Lint task(s).
-  grunt.registerTask('lint', ['jshint', 'csslint']);
+  grunt.registerTask('lint', ['jshint']);
 
   // Build task(s).
-  grunt.registerTask('build', ['lint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin']);
+  grunt.registerTask('build', ['lint', 'loadConfig', 'ngAnnotate']);
 
   // Test task.
   grunt.registerTask('test', ['copy:localConfig', 'test:server', 'test:client']);
