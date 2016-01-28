@@ -1,4 +1,4 @@
-# Note micro services 0.1
+# Note micro services 0.1.1
 
 ***
 
@@ -11,7 +11,7 @@ Note micro services运行环境，适用于研发及部署。
 * Npm 2.7.4
 * Node Packages:
     - grunt
-    
+
 继承关系：note micro services -->nodejs
 
 # 使用说明
@@ -85,11 +85,9 @@ db:
 ```
 
 
-#### Cap
+### Usage
 
-## Usage
-
-## Developing
+### Developing
 
 ### Tools
 
