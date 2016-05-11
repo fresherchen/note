@@ -1,13 +1,13 @@
 {
   "name": "notems",
   "description": "notems",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "author": "Jpchen <jpchen@leadstec.com>",
   "license": "Leadstec Commercial License",
   "engines": {
-    "node": ">=0.10.33",
-    "npm": ">=1.4.28"
+    "node": ">=4.3.0",
+    "npm": ">=3.8.7"
   },
   "scripts": {
     "start": "grunt",
