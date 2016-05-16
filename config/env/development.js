@@ -3,7 +3,7 @@
 module.exports = {
   db: {
     uri: 'mongodb://{{NOTES_DBHOST}}/{{NOTES_DBNAME}}',
-    // uri: 'mongodb://n01.lxpt.cn:41204/cap-dev',
+    // uri: 'mongodb://n01.lxpt.cn:41437/cap-dev',
     options: {
       user: '{{NOTES_DBUSER}}',
       pass: '{{NOTES_DBPASS}}'

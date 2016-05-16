@@ -7,13 +7,19 @@ module.exports = function(grunt) {
   var watchFiles = {
     serverViews: ['app/views/**/*.*'],
     serverJS: ['gruntfile.js', 'server.js', 'config/**/*.js', 'app/**/*.js', '!app/tests/'],
-    // mochaTests: ['app/tests/**/*.js']
+    mochaTests: ['app/tests/**/*.js']
   };
 
   // Project Configuration
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     watch: {
+      serverViews: {
+        files: watchFiles.serverViews,
+        options: {
+          livereload: true
+        }
+      },
       serverJS: {
         files: watchFiles.serverJS,
         tasks: ['jshint'],
@@ -21,24 +27,24 @@ module.exports = function(grunt) {
           livereload: true
         }
       },
-      // mochaTests: {
-        // files: watchFiles.mochaTests,
-        // tasks: ['test:server'],
-      // }
+      mochaTests: {
+        files: watchFiles.mochaTests,
+        tasks: ['test:server'],
+      }
     },
-    // jshint: {
-          // all: {
-            // src: watchFiles.clientJS.concat(watchFiles.serverJS),
-            // options: {
-              // jshintrc: true
-            // }
-          // }
-        // },
+    jshint: {
+      all: {
+        src: watchFiles.serverJS,
+        options: {
+          jshintrc: true
+        }
+      }
+    },
     nodemon: {
       dev: {
         script: 'server.js',
         options: {
-        nodeArgs: ['--debug'],
+          nodeArgs: ['--debug'],
           ext: 'js,html',
           watch: watchFiles.serverViews.concat(watchFiles.serverJS)
         }
@@ -54,13 +60,6 @@ module.exports = function(grunt) {
           'no-preload': true,
           'stack-trace-limit': 50,
           'hidden': []
-        }
-      }
-    },
-    ngAnnotate: {
-      production: {
-        files: {
-          'public/dist/application.js': '<%= applicationJavaScriptFiles %>'
         }
       }
     },
@@ -115,6 +114,7 @@ module.exports = function(grunt) {
     var config = require('./config/config');
 
     grunt.config.set('applicationJavaScriptFiles', config.assets.js);
+    grunt.config.set('applicationCSSFiles', config.assets.css);
   });
 
   // Default task(s).
@@ -130,10 +130,10 @@ module.exports = function(grunt) {
   grunt.registerTask('lint', ['jshint']);
 
   // Build task(s).
-  grunt.registerTask('build', ['lint', 'loadConfig', 'ngAnnotate']);
+  grunt.registerTask('build', ['lint', 'loadConfig']);
 
   // Test task.
-  grunt.registerTask('test', ['copy:localConfig', 'test:server', 'test:client']);
+  grunt.registerTask('test', ['copy:localConfig', 'test:server']);
   grunt.registerTask('test:server', ['env:test', 'mochaTest']);
-  grunt.registerTask('test:client', ['env:test', 'karma:unit']);
+  grunt.registerTask(['env:test', 'karma:unit']);
 };

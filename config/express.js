@@ -14,6 +14,7 @@ var fs = require('fs'),
   methodOverride = require('method-override'),
   helmet = require('helmet'),
   config = require('./config'),
+  consolidate = require('consolidate'),
   path = require('path');
 
 module.exports = function(db) {
@@ -23,6 +24,20 @@ module.exports = function(db) {
   // Globbing model files
   config.getGlobbedFiles('./app/models/**/*.js').forEach(function(modelPath) {
     require(path.resolve(modelPath));
+  });
+
+  //Set js cross domain
+  app.all('*', function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type');
+    res.header('Access-Control-Allow-Methods','PUT,POST,GET,DELETE,OPTIONS');
+
+    // intercept OPTIONS method
+    if ('OPTIONS' === req.method) {
+      res.send(200);
+    }else {
+      next();
+    }
   });
 
   // Passing the request url to environment locals
@@ -43,6 +58,13 @@ module.exports = function(db) {
 
   // Showing stack errors
   app.set('showStackError', true);
+
+  // Set swig as the template engine
+  app.engine('html', consolidate[config.templateEngine]);
+
+  // Set views path and view engine
+  app.set('view engine', 'html');
+  app.set('views', './app/views');
 
   // Enable logger (morgan)
   app.use(morgan(logger.getLogFormat(), logger.getLogOptions()));

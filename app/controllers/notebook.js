@@ -9,11 +9,18 @@ var mongoose = require('mongoose'),
   errorHandler = require('./errors'),
   _ = require('lodash');
 
+exports.index = function(req, res) {
+  res.render('index', {
+    title: 'NotesService',
+    content: 'The NotesService server is running ~'
+  });
+};
+
 /**
  * Create a notebook
  */
 exports.create = function(req, res){
-  
+
   var notebook = new Notebook(req.body);
     notebook.user = req.user.id;
 
@@ -41,24 +48,24 @@ exports.create = function(req, res){
     notebook.save(function(err){
       if(err){
         return res.status(400).send({
-          message: errorHandler.getErrorMessage(err) 
+          message: errorHandler.getErrorMessage(err)
         });
       }else{
-        res.json(notebook); 
+        res.json(notebook);
       }
     });
   };
 };
 
 /**
- * Show the current notebook 
+ * Show the current notebook
  */
 exports.read = function(req, res){
   res.json(req.notebook);
 };
 
 /**
- * Update a Notebook 
+ * Update a Notebook
  */
 exports.update = function(req,res){
   var notebook = req.notebook;
@@ -75,7 +82,7 @@ exports.update = function(req,res){
       }
     });
   };
-  
+
   var searchCon = {user:req.user.id, isDefault:'true'};
   if(notebook.isDefault){
     Notebook.find(searchCon).exec(function(err,OriginalNotebook){
@@ -85,7 +92,7 @@ exports.update = function(req,res){
         });
       }else{
         if(OriginalNotebook[0]){
-          if(toString(OriginalNotebook._id) === toString(notebook._id)){
+          if(OriginalNotebook._id.toString() === notebook._id.toString()){
             updateBook();
           }else{
             var conditions = {
@@ -117,7 +124,7 @@ exports.update = function(req,res){
 };
 
 /**
- * Update a notebook 
+ * Update a notebook
  */
 exports.delete = function(req,res){
   var notebook = req.notebook;
@@ -145,9 +152,9 @@ exports.delete = function(req,res){
  * List of Notebooks
  */
 exports.list = function(req,res){
-  
+
   var searchCon = {user:req.user.id};
-  
+
   searchCon = _.assign(searchCon,req.query);
   Notebook.find(searchCon).sort().exec(function(err,notebooks){
     if(err){
@@ -161,7 +168,7 @@ exports.list = function(req,res){
 };
 
 /**
- * Notebook middleware 
+ * Notebook middleware
  */
 exports.notebookById = function(req,res,next,id){
   Notebook.findById(id).populate('user', 'displayName').exec(function(err, notebook){
@@ -174,7 +181,7 @@ exports.notebookById = function(req,res,next,id){
 };
 
 /**
- * Notebook authorization middleware 
+ * Notebook authorization middleware
  */
 exports.hasAuthorization = function(req,res,next){
   req.user.id = (req.user.id).toString();

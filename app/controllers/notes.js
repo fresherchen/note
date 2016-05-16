@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Module dependencies 
+ * Module dependencies
  */
 var mongoose = require('mongoose'),
   errorHandler = require('./errors'),
@@ -11,19 +11,30 @@ var mongoose = require('mongoose'),
   config = require('../../config/config'),
   _ = require('lodash');
 /**
- * Create a note 
+ * Create a note
  */
 exports.create = function(req,res){
   var note = new Note(req.body);
   note.user = req.user.id;
-  
+
   if(note.content.length>100000){
     return res.status(400).send({
       message: 'The note content is too long !'
     });
   }
-  
+
   var searchCon = {user:req.user.id,isDefault:true};
+  var saveNote = function(note){
+    note.save(function(err){
+      if(err){
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }else{
+        res.json(note);
+      }
+    });
+  };
   if(!req.body.notebookId){
     Notebook.find(searchCon).exec(function(err,result){
       if(!result.length){
@@ -37,32 +48,21 @@ exports.create = function(req,res){
   }else{
     saveNote(note);
   }
-  var saveNote = function(note){
-    note.save(function(err){
-      if(err){
-        return res.status(400).send({
-          message: errorHandler.getErrorMessage(err)
-        });
-      }else{
-        res.json(note);
-      }
-    });
-  };
 };
 
 /**
- * Show the current note 
+ * Show the current note
  */
 exports.read = function(req, res){
   res.json(req.note);
 };
 
 /**
- * Update a note 
+ * Update a note
  */
 exports.update = function(req, res) {
   var note = req.note;
-  
+
   req.body.updatedOn = new Date();
   note = _.extend(note, req.body);
 
@@ -83,7 +83,7 @@ exports.update = function(req, res) {
 };
 
 /**
- * update the note's tag attr 
+ * update the note's tag attr
  */
 exports.updateTag = function(req,res){
 
@@ -113,16 +113,16 @@ exports.updateTag = function(req,res){
         message: errorHandler.getErrorMessage(err)
       });
     }else {
-      var result = 'The tag has been removed from this note successfuly!!!'
+      var result = 'The tag has been removed from this note successfuly!!!';
       if(req.body.flag === 'add')
-        result = 'The tag has been added to this note successfuly!!!'
+        result = 'The tag has been added to this note successfuly!!!';
       res.json({message:result});
     }
   });
 };
 
 /**
- * Delete a note 
+ * Delete a note
  */
 exports.delete = function(req, res) {
   var note = req.note;
@@ -139,7 +139,7 @@ exports.delete = function(req, res) {
 };
 
 /**
- * Move multiNotes to Trash or remove tag  
+ * Move multiNotes to Trash or remove tag
  */
 exports.updateMultiNotes = function(req,res) {
 
@@ -173,8 +173,9 @@ exports.updateMultiNotes = function(req,res) {
         message: errorHandler.getErrorMessage(err)
       });
     }else {
+      var result;
       if(req.attr === 'inTrash')
-      var result = 'Notebook was removed successfuly!!!';
+        result = 'Notebook was removed successfuly!!!';
       if(req.attr === 'removeTag')
         result = 'Tag was removed successfuly!!!';
       res.json({message: result});
@@ -183,7 +184,7 @@ exports.updateMultiNotes = function(req,res) {
 };
 
 /**
- * List of Notes 
+ * List of Notes
  */
 exports.list = function(req,res){
   var searchCon = {user: req.user.id, notebookId: req.query.notebookId, $nor: [{inTrash : true}]};
@@ -202,7 +203,7 @@ exports.list = function(req,res){
   if(req.query.tag){
     searchCon.tag = {$in:[req.query.tag]};
   }
-  
+
   var sortmode = req.query.sortmode ? req.query.sortmode:'-updatedOn';
 
   Note.find(searchCon).sort(sortmode).exec(function(err,notes){
@@ -217,7 +218,7 @@ exports.list = function(req,res){
 };
 
 /**
- * SendNyMail 
+ * SendNyMail
  */
 
 exports.sendByMail = function(req, res) {
@@ -232,7 +233,7 @@ exports.sendByMail = function(req, res) {
   smtpTransport.sendMail(mailOptions, function(err) {
     if (!err) {
       res.send({
-        message: 'An email has been sent to ' + user.email + ' with further instructions.'
+        message: 'An email has been sent to XXXX with further instructions.'
       });
     } else {
       res.status(400).send({

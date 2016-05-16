@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<!--     <div class="app-content"> -->
+    <div class="app-content" ng-class="{'app-header-fixed':appConfig.settings.headerFixed, 'app-aside-fixed':appConfig.settings.asideFixed, 'app-aside-folded':appConfig.settings.asideFolded}">
+
+        <div ui-butterbar></div>
+
+        <a href class="off-screen-toggle hide" ui-toggle-class="off-screen" data-target=".app-aside" ></a>
+
+        <div class="app-content-body fade-in-up" data-ui-view></div>
+
+    </div>
+
+{% endblock %}

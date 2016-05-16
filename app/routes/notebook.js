@@ -1,15 +1,17 @@
 'use strict';
 
 /**
- * Module dependencies 
+ * Module dependencies
  */
-var 
+var
 // users = require('../../app/controllers/users'),
   checkToken = require('../../app/controllers/check-token'),
   mongoose = require('mongoose'),
   notebook = require('../../app/controllers/notebook');
-  
+
 module.exports = function(app){
+  app.route('/')
+  .get(notebook.index);
   // Notebook routes
   app.route('/notebooks')
   .get(checkToken.checkTokeninUrl,notebook.list)

@@ -1,13 +1,7 @@
 'use strict';
 
 module.exports = {
-  db: {
-    uri: 'mongodb:///{{NOTES_DBHOST}}',
-    options: {
-      user: '{{NOTES_DBUSER}}',
-      pass: '{{NOTES_DBPASS}}'
-    }
-  },
+  db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_PORT_27017_TCP_ADDR || 'localhost') + '/cap',
   log: {
     // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
     format: 'combined',
