@@ -3,10 +3,10 @@
 module.exports = {
   port: 8443,
   db: {
-    uri: 'mongodb://{{NOTE_DBHOST}}/{{NOTE_DBNAME}}',
+    uri: 'mongodb://{{NOTES_DBHOST}}/{{NOTES_DBNAME}}',
     options: {
-      user: '{{NOTE_DBUSER}}',
-      pass: '{{NOTE_DBPASS}}'
+      user: '{{NOTES_DBUSER}}',
+      pass: '{{NOTES_DBPASS}}'
     }
   },
   log: {

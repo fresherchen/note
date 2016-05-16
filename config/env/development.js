@@ -2,13 +2,13 @@
 
 module.exports = {
   db: {
-    // uri: 'mongodb://{{NOTEMS_DBHOST}}/{{NOTEMS_DBNAME}}',
-    uri: 'mongodb://n01.lxpt.cn:41204/cap-dev',
+    uri: 'mongodb://{{NOTES_DBHOST}}/{{NOTES_DBNAME}}',
+    // uri: 'mongodb://n01.lxpt.cn:41204/cap-dev',
     options: {
-      // user: '{{NOTEMS_DBUSER}}',
-      // pass: '{{NOTEMS_DBPASS}}'
-      user: '',
-      pass: ''
+      user: '{{NOTES_DBUSER}}',
+      pass: '{{NOTES_DBPASS}}'
+      // user: '',
+      // pass: ''
     }
   },
   log: {

@@ -2,8 +2,8 @@
 
 module.exports = {
   app: {
-    title: '{{NOTEMS_TITLE}}',
-    description: '{{NOTEMS_DESC}}',
+    title: '{{NOTES_TITLE}}',
+    description: '{{NOTES_DESC}}',
     keywords: 'mongodb, node.js'
   },
   port: process.env.PORT || 3000,
