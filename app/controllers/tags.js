@@ -9,10 +9,10 @@ var mongoose = require('mongoose'),
   Tag = mongoose.model('Tag'),
   _ = require('lodash');
 /**
- * Create a tag 
+ * Create a tag
  */
 exports.create = function(req,res){
-  
+
   var tag = new Tag(req.body);
   tag.user = req.user.id;
 
@@ -29,14 +29,14 @@ exports.create = function(req,res){
 };
 
 /**
- * Show the current tag 
+ * Show the current tag
  */
 exports.read = function(req, res){
   res.json(req.tag);
 };
 
 /**
- * List of Tags 
+ * List of Tags
  */
 exports.list = function(req,res){
   var searchCon = {user:req.user.id};
@@ -67,7 +67,7 @@ exports.update = function(req,res){
 
   var tag = req.tag;
   tag = _.extend(tag, req.body);
-  
+
   tag.save(function(err){
     if(err){
       return res.status(400).send({
@@ -80,13 +80,13 @@ exports.update = function(req,res){
 };
 
 /**
- * delete a tag 
+ * delete a tag
  */
 exports.delete = function(req,res){
-  
+
   var tag = req.tag;
   tag = _.extend(tag, req.body);
-  
+
   tag.remove(function(err){
     if(err){
       return res.status(400).send({
@@ -100,7 +100,7 @@ exports.delete = function(req,res){
 };
 
 /**
- * tagByID 
+ * tagByID
  */
 exports.tagByID = function(req, res, next, id){
   Tag.findById(id).populate('user', 'displayName').exec(function(err, tag) {

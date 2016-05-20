@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
   Notebook = mongoose.model('Notebook'),
   Notes = require('./notes'),
   errorHandler = require('./errors'),
+  fs = require('fs'),
   _ = require('lodash');
 
 exports.index = function(req, res) {
@@ -16,6 +17,21 @@ exports.index = function(req, res) {
   });
 };
 
+exports.getApi = function(req,res){
+  var varUrl = (req.url).split('/');
+  var filename = varUrl[2];
+  var path = '/data/app/app/api/'+filename;
+  console.dir(path);
+  fs.stat(path,function(err,s){
+    if(!err && s.isFile()){
+      var readable = fs.createReadStream(path,'utf-8');
+      res.writeHead(200,{'Content-Type':'application/json'});
+      readable.pipe(res);
+    }else{
+      res.json({ message: 'Failed to load '+filename });
+    }
+  });
+};
 /**
  * Create a notebook
  */

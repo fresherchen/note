@@ -1,0 +1,1039 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample note server.\n\n1、本service是基于nodejs+mongodb+lowdb开发的，以调用API的方式对外提供Notes服务；\n\n2、目前版本暂不需要通过token验证即可调用，验证部分待后续补充；\n\n3、是否要为新用户创建一个默认笔记本待讨论，这里暂时没有；\n\n4、默认笔记本如果有则只能有一个，且不能被删除。\n\n5、笔记内容长度不大于100000；\n",
+        "version": "0.1.0",
+        "title": "Note service API Reference",
+        "contact": {
+            "name": "jpchen@leadstec.com"
+        }
+    },
+    "host": "192.168.2.102:41436",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/api/{filename}": {
+            "get": {
+                "tags": [
+                    "api"
+                ],
+                "summary": "Get the api json file",
+                "description": "json 格式文档",
+                "operationId": "getApi",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "filename",
+                        "description": "api文档的名字",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success operation",
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                }
+            }
+        },
+        "/notebooks": {
+            "get": {
+                "tags": [
+                    "notebook"
+                ],
+                "summary": "Get the notebooks list by condition",
+                "description": "",
+                "operationId": "getBooks",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "user",
+                        "description": "user的id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "isDefault",
+                        "description": "是否为默认的笔记本",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "in": "query",
+                        "name": "notebookName",
+                        "description": "笔记本名",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "count",
+                        "description": "页码",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "每页数量",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sort",
+                        "description": "排序方式，如：`notebookName(default)/-notebookName/(-)createdOn`",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Notebook"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "bad operation",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "notebook"
+                ],
+                "summary": "Add a new notebook",
+                "description": "",
+                "operationId": "addNotebook",
+                "parameters": [
+                    {
+                        "name": "notebookName",
+                        "in": "formData",
+                        "description": "notebook name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "user",
+                        "description": "user id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "in": "formData",
+                        "name": "isDefault",
+                        "description": "是否设置为默认笔记本；不传默认false",
+                        "type": "boolean",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success operation",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "note_auth": [
+                            "write_rest",
+                            "read_rest"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/notebooks/{notebookId}": {
+            "get": {
+                "tags": [
+                    "notebook"
+                ],
+                "summary": "get notebook by id",
+                "description": "",
+                "operationId": "getNotebookById",
+                "parameters": [
+                    {
+                        "name": "notebookId",
+                        "in": "path",
+                        "description": "notebook id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "user",
+                        "in": "formData",
+                        "description": "user id",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success opreation",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "note_auth": [
+                            "write_rest",
+                            "read_rest"
+                        ]
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "notebook"
+                ],
+                "summary": "update the notebook by id",
+                "description": "",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "notebookId",
+                        "description": "notebook id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "the notebook attrs",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/Notebook"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "notebook"
+                ],
+                "summary": "delete the notebook by id",
+                "description": "",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "notebookId",
+                        "description": "notebook id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "user",
+                        "description": "user id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/tags": {
+            "get": {
+                "tags": [
+                    "tag"
+                ],
+                "summary": "get tag",
+                "description": "",
+                "operationId": "getTags",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "user",
+                        "description": "user id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "tagName",
+                        "description": "the name of the tag",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "status",
+                        "description": "搜索精度，'Fuzzy'，与tagName配合，添加则为模糊查询",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "count",
+                        "description": "页码",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "每页数量",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sort",
+                        "description": "排序方式，如：`tagName(default)/-tagName`",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful get",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Tag"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "tag"
+                ],
+                "summary": "create a tag for a note",
+                "description": "",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "tag object",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/Tag"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Tag"
+                        }
+                    }
+                }
+            }
+        },
+        "/tags/search": {
+            "post": {
+                "tags": [
+                    "tag"
+                ],
+                "summary": "search the tags by ids",
+                "description": "",
+                "operationId": "searchTags",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "user",
+                        "description": "user id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "tagsId",
+                        "description": "tag's ids",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Tag"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tags/{tagId}": {
+            "get": {
+                "tags": [
+                    "tag"
+                ],
+                "summary": "get tag by tagId",
+                "description": "",
+                "operationId": "getTagById",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "tagId",
+                        "description": "tag's id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "user",
+                        "description": "user id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "tag"
+                ],
+                "summary": "update the tag by id",
+                "description": "",
+                "operationId": "updateTagById",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "tagId",
+                        "description": "tag's id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "tag object need to update",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/Tag"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "tag"
+                ],
+                "summary": "delete a tag by id",
+                "description": "",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "tagId",
+                        "description": "the id of the tag",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "user",
+                        "description": "user id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/notes": {
+            "get": {
+                "tags": [
+                    "note"
+                ],
+                "summary": "get note",
+                "description": "",
+                "operationId": "getNote",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "user",
+                        "description": "user id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "notebookId",
+                        "description": "notebook's id",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "tag",
+                        "description": "the id of the tag in the note",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "key",
+                        "description": "search note(including title or content) by key",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "count",
+                        "description": "页码",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "每页数量",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sort",
+                        "description": "排序方式，如：`-updatedOn(default)/updatedOn/(-)createdOn/(-)title`",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Note"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "note"
+                ],
+                "summary": "create note",
+                "description": "",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "note object need to be add",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/Note"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/notes/{noteId}": {
+            "get": {
+                "tags": [
+                    "note"
+                ],
+                "summary": "get note by id",
+                "description": "",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "user",
+                        "description": "user id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "noteId",
+                        "description": "note's id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    },
+                    {
+                        "note_auth": [
+                            "write_rest",
+                            "read_rest"
+                        ]
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "note"
+                ],
+                "summary": "update the note",
+                "description": "",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "noteId",
+                        "description": "note's id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "note object need to update",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Note"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    },
+                    {
+                        "note_auth": [
+                            "write_rest",
+                            "read_rest"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "note"
+                ],
+                "summary": "delete a note by id",
+                "description": "",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "noteId",
+                        "description": "note's id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "user",
+                        "description": "user id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/notes/tag": {
+            "post": {
+                "tags": [
+                    "note"
+                ],
+                "summary": "add or remove tag for tag",
+                "description": "",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "user",
+                        "description": "user id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "noteId",
+                        "description": "note's id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "tag",
+                        "description": "tag's id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "flag",
+                        "description": "add tag，不传默认删除，'add'",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/notes/mail": {
+            "post": {
+                "tags": [
+                    "note"
+                ],
+                "summary": "share note by email",
+                "description": "this method need to update before available",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "user",
+                        "description": "user's id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "noteId",
+                        "description": "note's id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "email",
+                        "description": "email address",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "message",
+                        "description": "message to be send",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/subsidiaryNoteUser": {
+            "get": {
+                "tags": [
+                    "subsidiaryUser"
+                ],
+                "summary": "get subsidiaryUser by user id",
+                "description": "",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "user",
+                        "description": "user's id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "subsidiaryUser"
+                ],
+                "summary": "create subsidiaryUser",
+                "description": "",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "user",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "listmode",
+                        "description": "list(default)/snippet",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sortmode",
+                        "description": "-updatedOn(default)/updatedOn/(-)createdOn/(-)title",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "subsidiaryUser"
+                ],
+                "summary": "update the subsidiaryUser",
+                "description": "",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "user",
+                        "description": "user id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "listmode",
+                        "description": "list/snippet",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "sortmode",
+                        "description": "-updatedOn/updatedOn/-createdOn/createdOn/-title/title",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK, number affected",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "subsidiaryUser"
+                ],
+                "summary": "remove a subsidiaryUser by id",
+                "description": "",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "user",
+                        "description": "user id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        },
+        "note_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "http://id.leadstec.com/auth/",
+            "flow": "implicit",
+            "scopes": {
+                "write_rest": "modify rest in your account",
+                "read_rest": "read your rest"
+            }
+        }
+    },
+    "definitions": {
+        "Notebook": {
+            "type": "object",
+            "required": [
+                "notebookName"
+            ],
+            "properties": {
+                "notebookName": {
+                    "type": "string",
+                    "example": "语文习题集"
+                },
+                "createdOn": {
+                    "type": "string"
+                },
+                "isDefault": {
+                    "type": "boolean"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "Tag": {
+            "type": "object",
+            "required": [
+                "tagName"
+            ],
+            "properties": {
+                "tagName": {
+                    "type": "string"
+                },
+                "createdOn": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "Note": {
+            "type": "object",
+            "required": [
+                "notebookId",
+                "user"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createdOn": {
+                    "type": "string"
+                },
+                "updatedOn": {
+                    "type": "string"
+                },
+                "notebookId": {
+                    "type": "string"
+                },
+                "inTrash": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Tag"
+                    }
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "gid": {
+                    "type": "string"
+                },
+                "lid": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

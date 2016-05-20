@@ -12,6 +12,9 @@ var
 module.exports = function(app){
   app.route('/')
   .get(notebook.index);
+
+  app.route('/api/:filename')
+  .get(checkToken.checkTokeninUrl,notebook.getApi);
   // Notebook routes
   app.route('/notebooks')
   .get(checkToken.checkTokeninUrl,notebook.list)
