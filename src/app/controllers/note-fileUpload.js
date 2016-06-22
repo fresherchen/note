@@ -11,7 +11,8 @@ var fs= require('fs'),
     internalURL: authUrl,
     region: 'regionOne'
   },
-  openstackPKGClient = require('pkgcloud').storage.createClient(openstackOpts);
+  // openstackPKGClient = require('pkgcloud').storage.createClient(openstackOpts);
+  openstackPKGClient;
 
 function generateGuid(guidNum) {
   var guid = '';

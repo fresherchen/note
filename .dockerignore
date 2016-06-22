@@ -1,0 +1,12 @@
+onbuild
+.git
+.gitignore
+.gitmodules
+.editorconfig
+docker-compose.yml
+docker-compose.yml.template
+README.md
+noteservices.md
+CHANGELOG.md
+LICENSE
+sftp-config.json

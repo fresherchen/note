@@ -1,0 +1,99 @@
+{
+  "image": "notes",
+  "version": "0.2.0",
+  "build": "{{PIPELINE_BUILD_NUMBER}}",
+  "schema": "20160622",
+  "permissions": [],
+  "envs": [
+    {
+      "name": "NODE_ENV",
+      "default": "development",
+      "replacements": []
+    },
+    {
+      "name": "NOTES_TITLE",
+      "default": "Notes",
+      "replacements": [
+        {
+          "pattern": "{{NOTES_TITLE}}",
+          "path": "`${APP_DIR}/config/env/all.js`",
+          "sudo": "node",
+          "type": "1"
+        }
+      ]
+    },
+    {
+      "name": "NOTES_DESC",
+      "default": "Notes",
+      "replacements": [
+        {
+          "pattern": "{{NOTEMS_DESC}}",
+          "path": "`${APP_DIR}config/env/all.js`",
+          "sudo": "node",
+          "type": "1"
+        }
+      ]
+    },
+    {
+      "name": "DB_PORT_27017_TCP_ADDR",
+      "default": "",
+      "replacements": [
+        {
+          "pattern": "{{NOTES_DBHOST}}",
+          "path": "`${APP_DIR}/config/env/${NODE_ENV}.js`",
+          "sudo": "node",
+          "type": "3"
+        }
+      ]
+    },
+    {
+      "name": "BACKEND_DBMODE",
+      "default": "json-server",
+      "replacements": [
+        {
+          "pattern": "{{BACKEND_DBMODE}}",
+          "path": "`${APP_DIR}/dbconf/index.js`",
+          "sudo": "node",
+          "type": "1"
+        }
+      ]
+    },
+    {
+      "name": "NOTES_DBNAME",
+      "default": "notes",
+      "replacements": [
+        {
+          "pattern": "{{NOTES_DBNAME}}",
+          "path": "`${APP_DIR}/config/env/${NODE_ENV}.js`",
+          "sudo": "node",
+          "type": "1"
+        }
+      ]
+    },
+    {
+      "name": "NOTES_DBUSER",
+      "default": "",
+      "replacements": [
+        {
+          "pattern": "{{NOTES_DBUSER}}",
+          "path": "`${APP_DIR}/config/env/${NODE_ENV}.js`",
+          "sudo": "node",
+          "type": "1"
+        }
+      ]
+    },
+    {
+      "name": "NOTES_DBPASS",
+      "default": "",
+      "replacements": [
+        {
+          "pattern": "{{NOTES_DBPASS}}",
+          "path": "`${APP_DIR}/config/env/${NODE_ENV}.js`",
+          "sudo": "node",
+          "type": "1"
+        }
+      ]
+    }
+  ],
+  "storages": []
+}

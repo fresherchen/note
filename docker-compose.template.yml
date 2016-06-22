@@ -1,0 +1,29 @@
+devdb:
+  image: reg.leadstec.com/mongo:latest
+  ports:
+    - "41434:27017"
+  volumes:
+    - /var/lib/docker/vfs/dir/logcenter/note-dev-db.microservices.com:/data/log
+    - /var/lib/docker/vfs/dir/dbcenter/note-dev-db.microservices.com:/data/db
+    - /var/lib/docker/vfs/dir/datacenter/note-dev-db.microservices.com:/data/persist
+  environment:
+    - EMAIL=user@leadstec.com
+    - MONGOD_ENABLE_SMALLFILES=true
+  hostname: note-dev-db.microservices.com
+dev:
+  image: edu.lxpt.cn/notes:latest
+  ports:
+    - "41436:3000"
+    - "41435:22"
+  volumes:
+    - /var/lib/docker/vfs/dir/logcenter/note-dev.microservices.com:/data/log
+    - /var/lib/docker/vfs/dir/datacenter/note-dev.microservices.com:/data/persist
+  environment:
+    - EMAIL=user@leadstec.com
+    - ENGINE=localhost
+    - ENABLE_SSHD=true
+    - NOTE_ENV=development
+    - PORT=3000
+  links:
+    - devdb:db
+  hostname: note-dev.microservices.com

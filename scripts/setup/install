@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+notify title "NOTES: Pre-installation starts ..."
+
+# copy schema and add to metadata
+cp -f /scripts/setup/notes.json ${LCS_HOME}/schema/notes.json
+lcs-bt --append notes
+
+# complete
+notify title "NOTES: Image installation completed."

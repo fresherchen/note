@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "This is a sample note server.\n\n1、本service是基于nodejs+mongodb+lowdb开发的，以调用API的方式对外提供Notes服务；\n\n2、目前版本暂不需要通过token验证即可调用，验证部分待后续补充；\n\n3、是否要为新用户创建一个默认笔记本待讨论，这里暂时没有；\n\n4、默认笔记本如果有则只能有一个，且不能被删除。\n\n5、笔记内容长度不大于100000；\n",
-        "version": "0.1.0",
+        "version": "0.2.0",
         "title": "Note service API Reference",
         "contact": {
             "name": "jpchen@leadstec.com"

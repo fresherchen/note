@@ -1,7 +1,7 @@
 {
   "name": "notes",
   "description": "notes",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": true,
   "author": "Jpchen <jpchen@leadstec.com>",
   "license": "Leadstec Commercial License",
@@ -25,7 +25,6 @@
     "grunt": "0.4.5",
     "helmet": "~0.9.1",
     "lodash": "^3.10.0",
-    "lowdb": "^0.12.5",
     "method-override": "^2.3.3",
     "mongoose": "~3.8.8",
     "morgan": "^1.6.1",
