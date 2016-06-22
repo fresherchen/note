@@ -22,7 +22,7 @@ dev:
     - EMAIL=user@leadstec.com
     - ENGINE=localhost
     - ENABLE_SSHD=true
-    - NOTE_ENV=development
+    - NODE_ENV=development
     - PORT=3000
   links:
     - devdb:db

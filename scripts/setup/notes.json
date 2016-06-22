@@ -28,7 +28,7 @@
       "replacements": [
         {
           "pattern": "{{NOTEMS_DESC}}",
-          "path": "`${APP_DIR}config/env/all.js`",
+          "path": "`${APP_DIR}/config/env/all.js`",
           "sudo": "node",
           "type": "1"
         }
