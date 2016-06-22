@@ -5,7 +5,7 @@
 #
 # Description       Dockerfile for Notes Service image base on nodejs
 #
-FROM  backend_nodejs_ms:latest
+FROM  edu.lxpt.cn/nodejs_ms:latest
 MAINTAINER Jpchen <jpchen@leadstec.com>
 LABEL leadstec-notes-build="0.2.0-{{PIPELINE_BUILD_NUMBER}}"
 
