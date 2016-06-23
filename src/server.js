@@ -27,8 +27,7 @@ if(index.dbMode === 'json-server'){
   mongoose.connection.on('error', function(err) {
     console.error(chalk.red('MongoDB connection error: ' + err));
     process.exit(-1);
-    }
-  );
+  });
 }
 
 // Init the express application

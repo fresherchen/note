@@ -11,6 +11,6 @@ if [[ -n "DB_PORT_27017_TCP_ADDR}" ]]; then
     fi
 fi
 
-# setup the note microservices
+# setup the note microservice
 cd ${APP_DIR}/
 grunt
