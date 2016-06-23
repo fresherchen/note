@@ -24,7 +24,7 @@
     "glob": "^5.0.13",
     "grunt": "0.4.5",
     "helmet": "~0.9.1",
-    "lodash": "^3.10.0",
+    "lodash": "^4.0.0",
     "method-override": "^2.3.3",
     "mongoose": "~3.8.8",
     "morgan": "^1.6.1",

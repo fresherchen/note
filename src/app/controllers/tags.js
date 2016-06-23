@@ -160,7 +160,7 @@ exports.delete = function(req,res){
   tag = _.extend(tag, req.body);
   if(index.dbMode === 'json-server'){
     index.operations(req.path,req.method,'',function(data,code){
-      res.json({message:'Tag delete successfully,and the tag in note can not be deleted when you use json-server!'});
+      res.json({message:'Tag delete successfully,but the tag in note can not be deleted when you use json-server!'});
     // removing the tag in notes can not be achieve with the json-server
     });
   }else if(index.dbMode === 'mongo'){
