@@ -51,7 +51,7 @@ container路径  | Host存放位置  | 说明
 
 ```
 nodejs:
-  image: reg.leadstec.com/notes:latest
+  image: reg.example.com/notes:latest
   ports:
   	- "41201:3000"
   volumes:
@@ -69,7 +69,7 @@ Node.js项目常采用MongoDB，本例子说明如何将notes service与mongo进
 
 ```
 db:
-   image:reg.leadstec.com/mongo:latest
+   image:reg.example.com/mongo:latest
    ports:
    	 - "41203:27017"
    	 - "41204:28017"
