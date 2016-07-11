@@ -5,7 +5,7 @@
         "version": "0.2.0",
         "title": "Note service API Reference",
         "contact": {
-            "name": "jpchen@leadstec.com"
+            "name": "jpchen@example.com"
         }
     },
     "host": "192.168.2.102:41436",
