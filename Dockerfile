@@ -6,8 +6,8 @@
 # Description       Dockerfile for Notes Service image base on nodejs
 #
 FROM  edu.lxpt.cn/nodejs_ms:latest
-MAINTAINER Jpchen <jpchen@leadstec.com>
-LABEL leadstec-notes-build="0.2.0-{{PIPELINE_BUILD_NUMBER}}"
+MAINTAINER Jpchen <jpchen@example.com>
+LABEL example-notes-build="0.2.0-{{PIPELINE_BUILD_NUMBER}}"
 
 # set environment variables
 ENV NOTES_VERSION="0.2.0"
