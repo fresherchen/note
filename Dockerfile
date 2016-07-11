@@ -1,11 +1,11 @@
 #
-# AUTHOR            Jpchen <jpchen@leadstec.com>
+# AUTHOR            Jpchen <jpchen@example.com>
 # DOCKER-VERSION    1.9.1
-# Copyright         (C) 2016 Leads Technologies Ltd. All rights reserved.
+# Copyright         (C) 2016 example Technologies Ltd. All rights reserved.
 #
 # Description       Dockerfile for Notes Service image base on nodejs
 #
-FROM  edu.lxpt.cn/nodejs_ms:latest
+FROM  edu.example.cn/nodejs_ms:latest
 MAINTAINER Jpchen <jpchen@example.com>
 LABEL example-notes-build="0.2.0-{{PIPELINE_BUILD_NUMBER}}"
 
